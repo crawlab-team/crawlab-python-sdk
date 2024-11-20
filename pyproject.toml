@@ -1,0 +1,77 @@
+[tool.poetry]
+name = "crawlab-sdk"
+version = "0.7.0rc1"
+description = "Python SDK for Crawlab"
+authors = ["Marvin Zhang <tikazyq@163.com>"]
+readme = "README.md"
+license = "BSD-3-Clause"
+homepage = "https://github.com/crawlab-team/crawlab-python-sdk"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent"
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+grpcio = "^1.68.0"
+grpcio-tools = "^1.59.0"
+httpx = "^0.23.0"
+rich = "^13.9.4"
+grpc-interceptor-headers = "^0.1.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.3"
+
+[tool.poetry.scripts]
+crawlab-cli = "crawlab.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "crawlab/grpc",
+]
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.11
+target-version = "py311"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+select = ["E", "F"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"

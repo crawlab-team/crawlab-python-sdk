@@ -1,0 +1,50 @@
+name: Publish Python Package
+
+on:
+  push:
+    branches: [ main, test, develop ]
+  pull_request:
+    types:
+      - opened
+
+env:
+  PACKAGE_NAME: crawlab-sdk
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    outputs:
+      is_new_version: ${{ steps.check_version.outputs.is_new_version }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        id: install_dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Check version
+        id: check_version
+        run: |
+          version=`poetry version -s`
+          res=`curl https://pypi.org/project/${{ env.PACKAGE_NAME }}/${version}/ -i -s | grep 'HTTP/2 404' | true`
+          if [[ $res =~ 404 ]]; then
+            echo "is_new_version=true" >> $GITHUB_OUTPUT 
+          else:
+            echo "is_new_version=false" >> $GITHUB_OUTPUT 
+          fi
+
+      - name: Build and publish
+        id: publish
+        if: ${{ always() && steps.check_version.outputs.is_new_version == 'true' }}
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry publish --build
