@@ -11,6 +11,9 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent"
 ]
+packages = [
+    { include = "crawlab" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
