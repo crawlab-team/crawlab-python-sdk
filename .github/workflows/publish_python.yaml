@@ -9,12 +9,19 @@ on:
 
 env:
   PACKAGE_NAME: crawlab-sdk
+  PYPI_REPOSITORY_URL: https://test.pypi.org/legacy/
+  PYPI_TEST_REPOSITORY_URL: https://test.pypi.org/legacy/
 
 jobs:
   build_and_publish:
+    name: Build and publish to PyPI
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
     outputs:
       is_new_version: ${{ steps.check_version.outputs.is_new_version }}
+      repository_url: ${{ steps.configure.outputs.repository_url }}
     steps:
       - uses: actions/checkout@v3
 
@@ -23,29 +30,41 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Configure settings
+        id: configure
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "repository_url=${{ env.PYPI_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
+          else
+            echo "repository_url=${{ env.PYPI_TEST_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install dependencies
-        id: install_dependencies
+        id: install
         run: |
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
 
-      - name: Check version
+      - name: Build package
+        id: build
+        run: |
+          poetry build
+
+      - name: Check package version
         id: check_version
         run: |
           version=$(poetry version -s)
           status_code=$(curl -o /dev/null -s -w "%{http_code}" https://pypi.org/project/${{ env.PACKAGE_NAME }}/${version}/)
-          if [ "$status_code" = "404" ]; then
+          if [ "$status_code" = "403" ]; then
             echo "is_new_version=true" >> $GITHUB_OUTPUT
           else
             echo "is_new_version=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build and publish
+      - name: Publish package
         id: publish
         if: ${{ always() && steps.check_version.outputs.is_new_version == 'true' }}
-        run: |
-          # Ensure we're in the directory containing pyproject.toml
-          ls -la
-          poetry build
-          poetry publish
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: ${{ steps.configure.outputs.repository_url }}
