@@ -13,15 +13,11 @@ env:
   PYPI_TEST_REPOSITORY_URL: https://test.pypi.org/legacy/
 
 jobs:
-  build_and_publish:
-    name: Build and publish to PyPI
+  build:
+    name: Build package
     runs-on: ubuntu-latest
-    environment: pypi
-    permissions:
-      id-token: write
     outputs:
-      is_new_version: ${{ steps.check_version.outputs.is_new_version }}
-      repository_url: ${{ steps.configure.outputs.repository_url }}
+      version: ${{ steps.build.outputs.version }}
     steps:
       - uses: actions/checkout@v3
 
@@ -30,18 +26,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Configure settings
-        id: configure
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "repository_url=${{ env.PYPI_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
-          else
-            echo "repository_url=${{ env.PYPI_TEST_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
-          fi
-          echo "repository_url=${repository_url}"
-
       - name: Install dependencies
-        id: install
         run: |
           python -m pip install --upgrade pip
           pip install poetry
@@ -51,22 +36,58 @@ jobs:
         id: build
         run: |
           poetry build
+          echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+  check_version:
+    name: Check version
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      is_new_version: ${{ steps.check.outputs.is_new_version }}
+    steps:
       - name: Check package version
-        id: check_version
+        id: check
         run: |
-          version=$(poetry version -s)
+          version="${{ needs.build.outputs.version }}"
           status_code=$(curl -o /dev/null -s -w "%{http_code}" https://pypi.org/project/${{ env.PACKAGE_NAME }}/${version}/)
           if [ "$status_code" = "403" ]; then
-            echo "is_new_version=true" >> $GITHUB_OUTPUT
+            is_new_version=true
           else
-            echo "is_new_version=false" >> $GITHUB_OUTPUT
+            is_new_version=false
           fi
-          echo "is_new_version=${is_new_version}"
+          echo "is_new_version=${is_new_version}" >> $GITHUB_OUTPUT
+
+  publish:
+    name: Publish to PyPI
+    needs: [build, check_version]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    if: needs.check_version.outputs.is_new_version == 'true'
+    steps:
+      - name: Configure repository URL
+        id: configure
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "repository_url=${{ env.PYPI_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
+          else
+            echo "repository_url=${{ env.PYPI_TEST_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
 
       - name: Publish package
-        id: publish
-        if: ${{ always() && steps.check_version.outputs.is_new_version == 'true' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ steps.configure.outputs.repository_url }}
