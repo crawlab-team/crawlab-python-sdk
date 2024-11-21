@@ -44,7 +44,5 @@ jobs:
       - name: Build and publish
         id: publish
         if: ${{ always() && steps.check_version.outputs.is_new_version == 'true' }}
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: |
           poetry publish --build
