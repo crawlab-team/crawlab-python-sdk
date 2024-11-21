@@ -8,6 +8,24 @@ Python SDK for Crawlab
 pip install crawlab-sdk
 ```
 
+## Usage
+
+### CLI
+
+```bash
+crawlab-cli
+```
+
+### Scrapy Integration
+
+In `settings.py`, add the following:
+
+```python
+ITEM_PIPELINES = {
+    'crawlab.CrawlabPipeline': 300
+}
+```
+
 ## Development
 
 ### Install dependencies

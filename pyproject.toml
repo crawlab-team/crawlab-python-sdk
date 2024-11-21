@@ -17,7 +17,7 @@ packages = [
 repository = "https://github.com/crawlab-team/crawlab-python-sdk"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 grpcio = "^1.68.0"
 grpcio-tools = "^1.59.0"
 httpx = "^0.23.0"

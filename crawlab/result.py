@@ -1,4 +1,3 @@
-import json
 from typing import List, Optional, Dict
 
 from crawlab.client import get_client, Client
@@ -45,18 +44,13 @@ class ResultService:
             result.set_task_id(tid)
             records.append(result)
 
-        data = json.dumps(
-            {
-                "task_id": tid,
-                "data": records,
-            }
-        ).encode("utf-8")
-
         # msg = stream_message_pb2.StreamMessage(
         #     code=stream_message_code_pb2.INSERT_DATA,
         #     data=data,
         # )
         # self.task_stub.Subscribe(iter([msg]))
+
+        # TODO: Use IPC to send data
 
 
 RS: Optional[ResultService] = None
