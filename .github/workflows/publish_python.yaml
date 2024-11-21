@@ -56,10 +56,11 @@ jobs:
         run: |
           version="${{ needs.build.outputs.version }}"
           status_code=$(curl -o /dev/null -s -w "%{http_code}" https://pypi.org/project/${{ env.PACKAGE_NAME }}/${version}/)
-          if [ "$status_code" = "403" ]; then
-            is_new_version=true
-          else
+          echo "status_code=${status_code}"
+          if [ "$status_code" = "200" ]; then
             is_new_version=false
+          else
+            is_new_version=true
           fi
           echo "is_new_version=${is_new_version}" >> $GITHUB_OUTPUT
 
