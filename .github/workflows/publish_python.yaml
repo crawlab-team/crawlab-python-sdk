@@ -61,6 +61,7 @@ jobs:
           else
             echo "is_new_version=false" >> $GITHUB_OUTPUT
           fi
+          echo "is_new_version=${is_new_version}"
 
       - name: Publish package
         id: publish
