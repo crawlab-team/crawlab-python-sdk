@@ -11,7 +11,7 @@ env:
   PACKAGE_NAME: crawlab-sdk
 
 jobs:
-  deploy:
+  build_and_publish:
     runs-on: ubuntu-latest
     outputs:
       is_new_version: ${{ steps.check_version.outputs.is_new_version }}
@@ -40,8 +40,12 @@ jobs:
           else
             echo "is_new_version=false" >> $GITHUB_OUTPUT
           fi
+
       - name: Build and publish
         id: publish
         if: ${{ always() && steps.check_version.outputs.is_new_version == 'true' }}
         run: |
-          poetry publish --build
+          # Ensure we're in the directory containing pyproject.toml
+          ls -la
+          poetry build
+          poetry publish
