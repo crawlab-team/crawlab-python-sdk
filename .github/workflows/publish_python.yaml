@@ -38,6 +38,7 @@ jobs:
           else
             echo "repository_url=${{ env.PYPI_TEST_REPOSITORY_URL }}" >> $GITHUB_OUTPUT
           fi
+          echo "repository_url=${repository_url}"
 
       - name: Install dependencies
         id: install
