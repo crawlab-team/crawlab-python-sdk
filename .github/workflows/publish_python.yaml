@@ -90,5 +90,3 @@ jobs:
 
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: ${{ steps.configure.outputs.repository_url }}

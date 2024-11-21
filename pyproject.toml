@@ -14,6 +14,7 @@ classifiers = [
 packages = [
     { include = "crawlab" }
 ]
+repository = "https://github.com/crawlab-team/crawlab-python-sdk"
 
 [tool.poetry.dependencies]
 python = "^3.11"
