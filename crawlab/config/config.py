@@ -2,21 +2,24 @@ import binascii
 import json
 import os
 
-from crawlab.constants.upload import CLI_DEFAULT_CONFIG_ROOT_DIR, CLI_DEFAULT_CONFIG_CLI_DIR, \
-    CLI_DEFAULT_CONFIG_FILE_NAME, \
-    CLI_DEFAULT_CONFIG_KEY_PASSWORD
+from crawlab.constants.upload import (
+    CLI_DEFAULT_CONFIG_CLI_DIR,
+    CLI_DEFAULT_CONFIG_FILE_NAME,
+    CLI_DEFAULT_CONFIG_KEY_PASSWORD,
+    CLI_DEFAULT_CONFIG_ROOT_DIR,
+)
 
 home = os.curdir
 
-if 'HOME' in os.environ:
-    home = os.environ['HOME']
-elif os.name == 'posix':
-    home = os.path.expanduser('~/')
-elif os.name == 'nt':
-    if 'HOMEPATH' in os.environ and 'HOMEDRIVE' in os.environ:
-        home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
-elif 'HOMEPATH' in os.environ:
-    home = os.environ['HOMEPATH']
+if "HOME" in os.environ:
+    home = os.environ["HOME"]
+elif os.name == "posix":
+    home = os.path.expanduser("~/")
+elif os.name == "nt":
+    if "HOMEPATH" in os.environ and "HOMEDRIVE" in os.environ:
+        home = os.environ["HOMEDRIVE"] + os.environ["HOMEPATH"]
+elif "HOMEPATH" in os.environ:
+    home = os.environ["HOMEPATH"]
 
 CRAWLAB_ROOT_PATH = os.path.join(home, CLI_DEFAULT_CONFIG_ROOT_DIR)
 CRAWLAB_CLI_PATH = os.path.join(CRAWLAB_ROOT_PATH, CLI_DEFAULT_CONFIG_CLI_DIR)
@@ -55,7 +58,7 @@ class Config(object):
             self.data = ConfigData(json.loads(data_str))
 
     def save(self):
-        with open(self.json_path, 'wb') as f:
+        with open(self.json_path, "wb") as f:
             f.write(self.data.json.encode())
 
     def set(self, key: str, value: str):

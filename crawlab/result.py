@@ -1,72 +1,17 @@
-from typing import List, Optional, Dict
+import sys
+from typing import Iterable
 
-from crawlab.client import get_client, Client
-from crawlab.config import get_task_id
-
-from crawlab.entity.result import Result
-from crawlab.grpc.services.task_service_pb2_grpc import TaskServiceStub
+from crawlab.entity.ipc_message import IPCMessage
 
 
-class ResultService:
-    # internal
-    c: Client = None
-    task_stub: TaskServiceStub = None
-
-    def __init__(self):
-        self.c = get_client()
-        self.task_stub = self.c.task_service_stub
-
-    def save_item(self, *items: Dict):
-        self.save(list(items))
-
-    def save_items(self, items: List[Dict]):
-        self.save(items)
-
-    def save(self, items: List[Dict]):
-        _items: List[Dict] = []
-        for i, item in enumerate(items):
-            _items.append(item)
-            if i > 0 and i % 50 == 0:
-                self._save(_items)
-                _items = []
-        if len(_items) > 0:
-            self._save(_items)
-
-    def _save(self, items: List[Dict]):
-        # task id
-        tid = get_task_id()
-        if tid is None:
-            return
-
-        records = []
-        for item in items:
-            result = Result(item)
-            result.set_task_id(tid)
-            records.append(result)
-
-        # msg = stream_message_pb2.StreamMessage(
-        #     code=stream_message_code_pb2.INSERT_DATA,
-        #     data=data,
-        # )
-        # self.task_stub.Subscribe(iter([msg]))
-
-        # TODO: Use IPC to send data
+def save_item(*items: dict):
+    return save_items(items)
 
 
-RS: Optional[ResultService] = None
-
-
-def get_result_service() -> ResultService:
-    global RS
-    if RS is not None:
-        return RS
-    RS = ResultService()
-    return RS
-
-
-def save_item(*items: Dict):
-    get_result_service().save_item(*items)
-
-
-def save_items(items: List[Dict]):
-    get_result_service().save_items(items)
+def save_items(items: Iterable[dict]):
+    msg = IPCMessage(
+        type="data",
+        payload=items,
+    )
+    sys.stdout.write(msg.model_dump_json())
+    sys.stdout.flush()
