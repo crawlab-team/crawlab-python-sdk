@@ -1,17 +1,16 @@
 import argparse
 
-from crawlab.constants.upload import (
-    CLI_ACTION_UPLOAD,
-    CLI_ACTION_LOGIN,
-    CLI_DEFAULT_API_ADDRESS,
-    CLI_DEFAULT_API_USERNAME,
-    CLI_DEFAULT_API_PASSWORD,
-    CLI_ACTION_CONFIG,
-    CLI_ACTION_MIGRATE,
-)
 from crawlab.cli.config import cli_config_func
 from crawlab.cli.login import cli_login
 from crawlab.cli.upload import cli_upload
+from crawlab.constants.upload import (
+    CLI_ACTION_CONFIG,
+    CLI_ACTION_LOGIN,
+    CLI_ACTION_UPLOAD,
+    CLI_DEFAULT_API_ADDRESS,
+    CLI_DEFAULT_API_PASSWORD,
+    CLI_DEFAULT_API_USERNAME,
+)
 
 # root parser
 root_parser = argparse.ArgumentParser(description="CLI tool for Crawlab")
@@ -133,8 +132,6 @@ def main():
             upload_parser.print_help()
         elif getattr(args, "action") == CLI_ACTION_CONFIG:
             config_parser.print_help()
-        elif getattr(args, "action") == CLI_ACTION_MIGRATE:
-            migrate_parser.print_help()
         else:
             root_parser.print_help()
 

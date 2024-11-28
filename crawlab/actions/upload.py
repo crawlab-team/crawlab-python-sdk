@@ -6,12 +6,12 @@ from typing import Optional
 from httpx import Response
 from rich.console import Console
 
-from crawlab.client import http_post
 from crawlab.constants.upload import (
-    CLI_DEFAULT_UPLOAD_SPIDER_MODE,
-    CLI_DEFAULT_UPLOAD_SPIDER_CMD,
     CLI_DEFAULT_UPLOAD_IGNORE_PATTERNS,
+    CLI_DEFAULT_UPLOAD_SPIDER_CMD,
+    CLI_DEFAULT_UPLOAD_SPIDER_MODE,
 )
+from crawlab.utils.request import http_post
 
 console = Console()
 

@@ -3,8 +3,8 @@ import unittest
 from argparse import Namespace
 
 from crawlab.cli.login import cli_login
-from crawlab.client import get_api_address
-from crawlab.config.config import config
+from crawlab.utils.config import config
+from crawlab.utils.request import get_api_address
 
 
 class CliActionLoginTestCase(unittest.TestCase):

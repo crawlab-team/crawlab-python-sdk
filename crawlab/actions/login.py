@@ -1,11 +1,11 @@
-from crawlab.client import http_post
-from crawlab.config.config import config
 from crawlab.constants.upload import (
-    CLI_DEFAULT_CONFIG_KEY_USERNAME,
-    CLI_DEFAULT_CONFIG_KEY_PASSWORD,
     CLI_DEFAULT_CONFIG_KEY_API_ADDRESS,
+    CLI_DEFAULT_CONFIG_KEY_PASSWORD,
     CLI_DEFAULT_CONFIG_KEY_TOKEN,
+    CLI_DEFAULT_CONFIG_KEY_USERNAME,
 )
+from crawlab.utils.config import config
+from crawlab.utils.request import http_post
 
 
 def login(api_address: str, username: str, password: str):

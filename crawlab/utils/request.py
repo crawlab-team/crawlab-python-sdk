@@ -2,12 +2,12 @@ import os
 
 import httpx
 
-from crawlab.config.config import config
 from crawlab.constants.request import DEFAULT_CRAWLAB_API_ADDRESS
 from crawlab.constants.upload import (
     CLI_DEFAULT_CONFIG_KEY_API_ADDRESS,
     CLI_DEFAULT_CONFIG_KEY_TOKEN,
 )
+from crawlab.utils.config import config
 
 
 def get_api_address() -> str:

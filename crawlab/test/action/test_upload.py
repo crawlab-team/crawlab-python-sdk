@@ -9,7 +9,7 @@ import requests
 from crawlab.cli.login import cli_login
 from crawlab.cli.upload import cli_upload
 from crawlab.client import get_api_address
-from crawlab.config.config import config
+from crawlab.utils.config import config
 
 
 class CliActionUploadTestCase(unittest.TestCase):
