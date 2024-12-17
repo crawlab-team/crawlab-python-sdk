@@ -1,17 +1,15 @@
 import os
-from argparse import Namespace
 
-from crawlab.cli.login import cli_login
+from crawlab.actions.login import login
+from crawlab.constants.upload import (
+    CLI_DEFAULT_API_PASSWORD,
+    CLI_DEFAULT_API_USERNAME,
+)
 from crawlab.utils.config import config
 from crawlab.utils.request import get_api_address
 
 
 def test_login():
-    args = Namespace(
-        username="admin",
-        password="admin",
-        api_address=get_api_address(),
-    )
-    cli_login(args)
+    login(get_api_address(), CLI_DEFAULT_API_USERNAME, CLI_DEFAULT_API_PASSWORD)
     assert os.path.exists(config.json_path)
     assert len(config.data.get("token")) > 0

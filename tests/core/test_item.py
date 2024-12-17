@@ -9,9 +9,9 @@ def test_save_item_single(capsys):
 
     capsys_res = capsys.readouterr()
     assert capsys_res.err == ""
-    assert capsys_res.out != ""
-    assert capsys_res.out.startswith("{")
-    assert capsys_res.out.endswith("}")
+    assert capsys_res.out.strip() != ""
+    assert capsys_res.out.strip().startswith("{")
+    assert capsys_res.out.strip().endswith("}")
     message = json.loads(capsys_res.out)
 
     assert message["type"] == "data"

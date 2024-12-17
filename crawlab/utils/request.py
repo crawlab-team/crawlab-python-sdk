@@ -40,9 +40,8 @@ def http_request(
         url = f"{get_api_address()}{url}"
 
     # token
-    if token is None:
-        token = get_api_token()
-    headers["Authorization"] = token
+    if token or get_api_token():
+        headers["Authorization"] = token or get_api_token()
 
     # args
     kwargs = {}
