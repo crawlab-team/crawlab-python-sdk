@@ -88,7 +88,7 @@ jobs:
         id: check
         run: |
           version="${{ needs.build.outputs.version }}"
-          status_code=$(curl -o /dev/null -s -w "%{http_code}" https://pypi.org/project/${{ env.PACKAGE_NAME }}/${version}/)
+          status_code=$(curl -o /dev/null -s -w "%{http_code}" https://pypi.org/pypi/${{ env.PACKAGE_NAME }}/${version}/json)
           echo "status_code=${status_code}"
           if [ "$status_code" = "200" ]; then
             is_new_version=false
