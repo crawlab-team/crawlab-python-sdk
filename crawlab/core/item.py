@@ -13,5 +13,5 @@ def save_items(items: Iterable[dict]):
         type="data",
         payload=items,
     )
-    sys.stdout.writelines([msg.model_dump_json()])
+    sys.stdout.write(msg.model_dump_json() + "\n")
     sys.stdout.flush()
