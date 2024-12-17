@@ -64,6 +64,8 @@ jobs:
         ports:
           - 8080:8080
     steps:
+      - uses: actions/checkout@v4
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
