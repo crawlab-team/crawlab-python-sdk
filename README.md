@@ -26,20 +26,36 @@ ITEM_PIPELINES = {
 }
 ```
 
+### Save Scraped Items
+    
+```python
+from crawlab import save_item
+
+scraped_items = [
+    {
+        'name': 'item1',
+        'value': 'value1'
+    },
+    {
+        'name': 'item2',
+        'value': 'value2'
+    }
+]
+
+for item in scraped_items:
+    save_item(item) 
+```
+
 ## Development
+
+### Pre-requisites
+
+```bash
+pip install poetry
+```
 
 ### Install dependencies
 
 ```bash
-pip install -r requirements.txt
-```
-
-### Compile gRPC
-
-```bash
-# Set the environment variable CRAWLAB_PROTO_PATH to the path of the gRPC proto files
-export CRAWLAB_PROTO_PATH=/path/to/grpc/proto/files
-
-# Compile gRPC to Python code
-./compile_grpc.sh
+poetry install
 ```
