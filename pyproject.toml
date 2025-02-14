@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "crawlab-sdk"
-version = "0.7.0rc6"
+version = "0.7.0"
 description = "Python SDK for Crawlab"
 authors = ["Marvin Zhang <tikazyq@163.com>"]
 readme = "README.md"
