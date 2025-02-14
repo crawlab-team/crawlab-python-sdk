@@ -17,14 +17,14 @@ packages = [
 repository = "https://github.com/crawlab-team/crawlab-python-sdk"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-httpx = "^0.23.0"
-rich = "^13.9.4"
-pydantic = "^2.10.1"
+python = ">=3.9"
+httpx = ">=0.23.0"
+rich = ">=13.9.4"
+pydantic = ">=2.10.1"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.3.3"
-pytest = "^8.3.3"
+ruff = ">=0.3.3"
+pytest = ">=8.3.3"
 
 [tool.poetry.scripts]
 crawlab-cli = "crawlab.cli:main"
